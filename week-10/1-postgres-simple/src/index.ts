@@ -1,6 +1,8 @@
-import { Client } from 'pg'
-import { DB_URL } from './config';
+import { Client } from "pg";
+import { DB_URL } from "./config";
 
 export const client = new Client({
-    connectionString: DB_URL
+  connectionString: DB_URL,
 });
+
+client.connect();
