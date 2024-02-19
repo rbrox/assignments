@@ -9,8 +9,18 @@ import { client } from "..";
  *   name: string
  * }
  */
-export async function createUser(username: string, password: string, name: string) {
-    
+export async function createUser(
+  username: string,
+  password: string,
+  name: string
+) {
+  const result = await client.query(`
+    INSERT INTO users VALUES(
+        username,
+        password,
+        name
+    );`);
+  return result;
 }
 
 /*
@@ -22,5 +32,8 @@ export async function createUser(username: string, password: string, name: strin
  * }
  */
 export async function getUser(userId: number) {
-    
+  const result = await client.query(`
+    SELECT * FROM users WHERE
+        id = userId;`);
+  return result;
 }
