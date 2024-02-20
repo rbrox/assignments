@@ -42,5 +42,8 @@ export async function getUser(userId: number) {
         RETURNING username, password, name;`,
     [userId]
   );
-  return result;
+  let { rows } = await client.query(`SELECT * FROM users WHERE id = $1 ;`, [
+    userId,
+  ]);
+  return rows[0];
 }
