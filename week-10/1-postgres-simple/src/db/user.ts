@@ -14,12 +14,16 @@ export async function createUser(
   password: string,
   name: string
 ) {
-  const result = await client.query(
+  await client.query(
     `
-    INSERT INTO users VALUES($1, $2, $3)`,
+    INSERT INTO users(username, password, name) VALUES($1, $2, $3)`,
     [username, password, name]
   );
-  return result;
+  let { rows } = await client.query(
+    `SELECT * FROM users WHERE username = $1 AND password = $2 AND name = $3;`,
+    [username, password, name]
+  );
+  return rows[0];
 }
 
 /*
