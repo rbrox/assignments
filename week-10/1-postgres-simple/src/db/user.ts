@@ -14,12 +14,11 @@ export async function createUser(
   password: string,
   name: string
 ) {
-  const result = await client.query(`
-    INSERT INTO users VALUES(
-        username,
-        password,
-        name
-    );`);
+  const result = await client.query(
+    `
+    INSERT INTO users VALUES($1, $2, $3)`,
+    [username, password, name]
+  );
   return result;
 }
 
@@ -32,8 +31,12 @@ export async function createUser(
  * }
  */
 export async function getUser(userId: number) {
-  const result = await client.query(`
+  const result = await client.query(
+    `
     SELECT * FROM users WHERE
-        id = userId;`);
+        id = $1
+        RETURNING username, password, name;`,
+    [userId]
+  );
   return result;
 }

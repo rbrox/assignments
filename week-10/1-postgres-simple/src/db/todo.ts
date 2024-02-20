@@ -14,12 +14,11 @@ export async function createTodo(
   title: string,
   description: string
 ) {
-  const result = await client.query(`
-    INSERT INTO todos VALUES(
-        user_id,
-        title,
-        description
-    );`);
+  const result = await client.query(`INSERT INTO todos VALUES($1, $2, $3);`, [
+    userId,
+    title,
+    description,
+  ]);
 
   return result;
 }
@@ -34,11 +33,14 @@ export async function createTodo(
  * }
  */
 export async function updateTodo(todoId: number) {
-  const result = await client.query(`
+  const result = await client.query(
+    `
     UPDATE todos SET
         done = TRUE
-        WHERE id = todoId;
-    `);
+        WHERE id = $1;
+    `,
+    [todoId]
+  );
 
   return result;
 }
@@ -54,9 +56,12 @@ export async function updateTodo(todoId: number) {
  * }]
  */
 export async function getTodos(userId: number) {
-  const result = await client.query(`
+  const result = await client.query(
+    `
     SELECT * FROM todos WHERE
-        user_id = userId;`);
+        user_id = $1;`,
+    [userId]
+  );
 
   return result;
 }
